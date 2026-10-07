@@ -26,6 +26,7 @@ pipeline {
                 call npm install -g pm2
                 pm2 delete my-app || exit /b 0
                 pm2 start server.js --name my-app --watch --env production
+                pm2 save
                 '''
             }
         }
