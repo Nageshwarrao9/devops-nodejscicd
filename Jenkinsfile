@@ -20,12 +20,23 @@ pipeline {
             }
         }
 
-        
+        stage('Deploy') {
+            steps {
+                bat '''
+                REM Kill any existing Node process
+                taskkill /F /IM node.exe >nul 2>&1 || exit /b 0
+
+                REM Start server.js in background
+                powershell -Command "Start-Process node -ArgumentList 'server.js' -WorkingDirectory '%CD%'"
+                '''
+            }
+        }
     }
 
     post {
         success {
-            echo 'CI/CD Pipeline completed successfully!'
+            echo 'CI/CD Pipeline completed successfully! 🎉'
+            echo 'Application is now running at http://localhost:3000'
         }
         failure {
             echo 'CI/CD Pipeline failed.'
